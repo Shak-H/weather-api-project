@@ -1,3 +1,7 @@
+# General Assembly - project 2
+# Weather App - weather-api-project
+The live project: [Weather App](https://search-the-weather-yt-sh.netlify.app/)
+
 Weather API - GA Project 2
 
 
@@ -55,7 +59,7 @@ React-router
 
 Insomnia / Postman
 
-Weather API
+[Weather API](https://www.weatherapi.com/docs/)
 
 GETTING STARTED
 
@@ -65,7 +69,7 @@ PLANNING
 
 THE WEATHER API
 
-The first step in our project was to choose a public API to use with our React app. Yin-wai and I both felt picking an API that anyone could relate to was important. Then, seeing as we love nothing better in this country than to discuss the weather, an app where you could check what the weather is going to be like or has been like seemed perfect. After researching several different public API’s related to weather we settled on Weather API.
+The first step in our project was to choose a public API to use with our React app. Yin-wai and I both felt picking an API that anyone could relate to was important. Then, seeing as we love nothing better in this country than to discuss the weather, an app where you could check what the weather is going to be like or has been like seemed perfect. After researching several different public API’s related to weather we settled on [Weather API](https://www.weatherapi.com/docs/).
 
 Weather API provides different types of information relating to weather and geo data, such as Real-time weather, 14 days forecasts, historical weather, astronomy and Air Quality Data.
 
