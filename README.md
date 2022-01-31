@@ -53,8 +53,7 @@ Weather API provides different types of information relating to weather and geo 
 
 We started by using the Postman REST client to test the API and see how the data would be presented. This was our first project using an API so it took us a while to get to grips with the documentation and how to access the information we wanted to display. Weather API requires an API key, so we registered to receive this and started sending some test requests. We soon figured out the JSON formatting, here is an example of one of our GET requests. 
 
-
-
+![image](https://user-images.githubusercontent.com/81522060/151801923-52445bc6-383a-430b-9e0e-a1a7296cc12e.png)
 
 We only had 48 hours to build the app, and so decided to use just four of the requests provided; current weather, forecast, historical weather and Astronomy data. 
 
@@ -70,29 +69,140 @@ Now it was time to start writing the code. We decided to start by working togeth
 
 With our page components defined and exported, we installed React Router to create routing in our main `App.js` file. We defined and returned the main HTML structure with `header` and `main` elements, before wrapping the HTML in a `BrowserRouter` component and adding in Routes for each page, defining paths and components.
 
+```
 
-
+<Router>
+      <section className="app-section">
+        <header>
+          <Nav />
+        </header>
+        <main>
+          <Switch>
+            <Route path="/forecast.json" component={Forecast_2} />
+            <Route path="/history.json" component={History} />
+            <Route path="/astronomy.json" component={Astronomy} />
+            <Route path="/" component={Home2} />
+          </Switch>
+        </main>
+      </section>
+    </Router>
+    
+```
 ### <a name='forms'>FORMS</a>
 
 One of the great things about the Weather API, was it had lots of different request parameters so, rather than giving generic information on the weather, the user could tailor the request to give them the exact information they were looking for. Users visiting the site can select a location, a time, a set amount of days and even a language of their choice. The forms, allowing the user to select the information they wanted to see, were therefore a central part of our app.
 
 We used React’s Effect Hook to allow the request to be tailored depending on the information put in by the user. We then opted to use Axios for HTTP requests, so we installed it to our dependencies before writing out our request. We wrote a GET request with Axios, where the URL would change depending on the data parameters selected by the user, and added an Authorization header for our API key. Axios automatically transforms JSON data so there was no need to parse the response, and we used dot notation to return just the required data nested in our response object.
 
+```
+
+  useEffect(() => {
+    async function fetchLocation() {
+      const config = {
+        method: "get",
+        url: `http://api.weatherapi.com/v1/forecast.json?key=8b928a9753d74262887160151212610&q=${finalFormSubmit.location}&days=1&aqi=yes&alerts=yes&lang=${finalFormSubmit.language}&hour=${finalFormSubmit.time}`,
+        headers: { api: "8b928a9753d74262887160151212610" },
+      };
+      try {
+        const response = await axios(config);
+        const forecastDay = response.data.forecast.forecastday;
+        const hour = forecastDay[0].hour;
+        setTimeCondition(hour[0].condition.text);
+        setForecast(forecastDay[0].day.condition.text);
+        setLocations(response.data.location);
+        setCurrentCondition(response.data.current.condition.text);
+        setCurrentTemp(response.data.current.temp_c);
+      } catch (err) {}
+    }
+    fetchLocation();
+  }, [finalFormSubmit]);
+
+```
+
 We used React’s State Hook to store form data as an object. Each of our HTML form inputs contained an onChange event handler to update the data variable’s state object with the relevant value. We then used the information stored to change the request parameters in the URL with an `onSubmit` event handler. 
 
+```
 
+const [formSubmit, setFormSubmit] = useState({
+    location: "",
+    time: "15",
+    language: "",
+  });
+  const [finalFormSubmit, setFinalFormSubmit] = useState({
+    location: "",
+    time: "",
+    language: "eng",
+  });
+
+  const handleLocationChange = (event) => {
+    const { name, value } = event.target;
+    setFormSubmit({
+      ...formSubmit,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (event) => {
+    console.log("formSubmitted");
+    event.preventDefault();
+    setFinalFormSubmit(formSubmit);
+  };
+  
+```
 
 To enable the user to select different times and languages we used the `select` Tag which creates a drop-down list of options. 
 
+```
 
+ <select
+    name="language"
+    value={formSubmit.language}
+    placeholder="Choose your language"
+    onChange={handleLocationChange}
+ >
+    <option value="eng">English</option>
+    <option value="bn">Bengali</option>
+    <option value="bg">Bulgarian</option>
+    <option value="zh">Chinese Simplified</option>
+    <option value="zh_tw">Chinese Traditional</option>
+    <option value="cs">Czech</option>
+    <option value="da">Danish</option>
+    <option value="nl">Dutch</option>
+    <option value="eng">English</option>
+    <option value="fi">Finnish</option>
+    <option value="fr">French</option>
+
+```
 
 The code for the Home, History and Astronomy Page was quite similar, with the information the user can select the main thing that changed. The forecast page however, displayed a lot more information to the user and so we decided to use a ternary operator and an `onClick` event listener, to allow the user to select whether or not they could see the extra information. 
 
+```
 
+const ForecastDay_2 = ({ day, date, hour }) => {
+  const [displayExtra, setDisplayExtra] = useState(false);
+  const toggleDisplay = () => {
+    setDisplayExtra(!displayExtra);
+  };
+  const displayShowHide = displayExtra ? "Expand" : "Condense";
+
+```
 
 This extra information was stored in a separate component and then displayed depending on whether the user clicked to see it, we again used a ternary operator here. 
 
+```
 
+  <div>
+        <span onClick={toggleDisplay}>{displayShowHide}</span>
+      </div>
+      {!displayExtra ? (
+        <>
+          <ForecastDayExtra_2 hour={hour} />
+        </>
+      ) : (
+        <></>
+      )}
+   
+```
 
 ### <a name='styling'>STYLING</a>
 
@@ -104,7 +214,7 @@ We created partial SASS files to modularize our CSS, making it easier to work co
 
 The main bug is around the information displayed to the user once the requests are made. When the user selects a different language, only the information that the API sends back is given in the chosen language.
 
-
+![image](https://user-images.githubusercontent.com/81522060/151804264-c4252135-1f4f-448e-88fc-bf7b937738e9.png)
 
 ## <a name='improvements'>FUTURE IMPROVEMENTS</a>
 
