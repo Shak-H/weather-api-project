@@ -1,5 +1,6 @@
 # Weather API - GA Project 2
 
+![gif](https://github.com/Shak-H/weather-api-project/blob/master/weather-app-gif.gif)
 
 ## TABLE OF CONTENTS
 
