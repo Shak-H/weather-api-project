@@ -67,24 +67,27 @@ We worked together to sketch out some wireframes on paper to envision the HTML l
 
 Now it was time to start writing the code. We decided to start by working together over Zoom and using VSCode’s LiveShare feature, so we could collaborate on the same file. We wanted to establish the main site structure together and get the API working with React. After creating the React app, we created functional components with a placeholder h2 element for all the pages. These were saved in a components folder to keep things organised.
 
-With our page components defined and exported, we installed React Router to create routing in our main `App.js` file. We defined and returned the main HTML structure with `header` and `main` elements, before wrapping the HTML in a `BrowserRouter` component and adding in Routes for each page, defining paths and components.
+With our page components defined and exported, we installed React Router to create routing in our main `App.js` file. We defined and returned the main HTML structure with `header`, `footer` and `main` elements, before wrapping the HTML in a `BrowserRouter` component and adding in Routes for each page, defining paths and components.
 
 ```
 
-<Router>
-      <section className="app-section">
-        <header>
-          <Nav />
-        </header>
+    <Router>
+      <header>
+        <Nav />
+      </header>
+      <body>
         <main>
           <Switch>
-            <Route path="/forecast.json" component={Forecast_2} />
+            <Route path="/forecast.json" component={Forecast} />
             <Route path="/history.json" component={History} />
             <Route path="/astronomy.json" component={Astronomy} />
-            <Route path="/" component={Home2} />
+            <Route path="/" component={Home} />
           </Switch>
         </main>
-      </section>
+      </body>
+      <footer>
+        <Footer />
+      </footer>
     </Router>
     
 ```
@@ -178,7 +181,7 @@ The code for the Home, History and Astronomy Page was quite similar, with the in
 
 ```
 
-const ForecastDay_2 = ({ day, date, hour }) => {
+const ForecastDay = ({ day, date, hour }) => {
   const [displayExtra, setDisplayExtra] = useState(false);
   const toggleDisplay = () => {
     setDisplayExtra(!displayExtra);
@@ -191,16 +194,18 @@ This extra information was stored in a separate component and then displayed dep
 
 ```
 
-  <div>
-        <span onClick={toggleDisplay}>{displayShowHide}</span>
-      </div>
-      {!displayExtra ? (
-        <>
-          <ForecastDayExtra_2 hour={hour} />
-        </>
-      ) : (
-        <></>
-      )}
+  <div id="expand-div">
+    <span onClick={toggleDisplay}>{displayShowHide}</span>
+  </div>
+  {!displayExtra ? (
+    <>
+      <ForecastDayExtra hour={hour} />
+    </>
+  ) : (
+    <></>
+  )}
+  </div>
+    
    
 ```
 
